@@ -3,11 +3,13 @@ const multer = require('multer');
 const {
     getAllBooks,
     addBook,
+    updateBook,
+    deleteBook,
     releaseBook,
-    returnBook,
+    returnBook
 } = require('../controllers/bookController');
-const authenticate = require('../middlewares/authenticate');
-const isAdmin = require('../middlewares/isAdmin');
+const { authenticate, isAdmin } = require('../middlewares/authenticate');
+
 
 const router = express.Router();
 
@@ -23,6 +25,8 @@ const upload = multer({ storage });
 
 router.get('/', authenticate, getAllBooks);
 router.post('/', authenticate, isAdmin, upload.single('image'), addBook);
+router.put('/:bookId', authenticate, isAdmin, updateBook);
+router.delete('/:bookId', authenticate, isAdmin, deleteBook);
 router.post('/release', authenticate, isAdmin, releaseBook);
 router.post('/return', authenticate, isAdmin, returnBook);
 
