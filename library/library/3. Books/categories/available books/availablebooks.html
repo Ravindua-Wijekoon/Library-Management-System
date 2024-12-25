@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the library management system | Books</title>
+    <link rel="stylesheet" href="availablebooks.css">
+</head>
+
+<body>
+    <header>
+        <img src="https://lib.cmb.ac.lk/wp-content/uploads/2016/09/logo-3.png" width="300">
+        <a href="#" class="logo">
+            <p>THE LIBRARY | Books | Available Books</p>
+        </a>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button type="button" onclick="toggleSearch()">Search</button>
+        </div>
+
+        <div class="bx bx-menu" id="menu-icon"></div>
+        <ul class="navbar">
+            <li><a href="file:///C:\Users\GAYUMI\Desktop\library\home page\home.html">Home</a></li>
+            <li><a href="#Contact">Contact</a></li>
+        </ul>
+    </header>
+
+    <h2>EDUCATIONAL BOOKS</h2>
+    <div class="book-container">
+        <!-- Book card 1 -->
+        <div class="book-card">
+            <img src="https://i.ebayimg.com/images/g/jKkAAOSwqC5mt3hX/s-l1600.png" alt="Book Title 1"
+                class="book-image">
+            <div class="book-title">ENGINEERING MATHEMATICS <br> -JHON BIRD- <br> 7th edition</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">A practical introduction to the core mathematics required for engineering
+                study and practice.
+                John Bird's approach is based on worked examples and interactive problems. This makes it ideal for
+                students from
+                a wide range of academic backgrounds as the student can work through the material at their own pace.
+                Mathematical theories are explained in a straightforward manner, being supported by practical
+                engineering examples and applications in order to ensure that readers can relate theory to practice.
+                The extensive and thorough topic coverage makes this an ideal text for a range of Level 2 and 3
+                engineering courses.</div>
+        </div>
+
+        <!-- Book card 1 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+
+        <!-- Book card 2 -->
+        <div class="book-card">
+            <img src="book3.jpg" alt="Book Title 3" class="book-image">
+            <div class="book-title">Book Title 3</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+        <!-- Book card 3 -->
+        <div class="book-card">
+            <img src="book4.jpg" alt="Book Title 4" class="book-image">
+            <div class="book-title">Book Title 4</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+
+        <!-- Book card 4 -->
+        <div class="book-card">
+            <img src="book5.png" alt="Book Title 1" class="book-image">
+            <div class="book-title">title</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">description</div>
+        </div>
+
+        <!-- Book card 5 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+
+    </div>
+    <h2> STORY BOOKS</h2>
+
+    <div class="book-container">
+        <!-- Book card 1 -->
+        <div class="book-card">
+            <img src="book1.png" alt="Book Title 1" class="book-image">
+            <div class="book-title">title</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">description</div>
+        </div>
+
+        <!-- Book card 2 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+
+        <!-- Book card 3 -->
+        <div class="book-card">
+            <img src="book3.jpg" alt="Book Title 3" class="book-image">
+            <div class="book-title">Book Title 3</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+        <!-- Book card 4 -->
+        <div class="book-card">
+            <img src="book4.jpg" alt="Book Title 4" class="book-image">
+            <div class="book-title">Book Title 4</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+        <!-- Book card 1 -->
+        <div class="book-card">
+            <img src="book5.png" alt="Book Title 1" class="book-image">
+            <div class="book-title">title</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">description</div>
+        </div>
+
+        <!-- Book card 2 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+    </div>
+
+
+    <h1><br></h1>
+    <footer>
+
+        <p>&copy; 2024 University Library Management System</p>
+    </footer>
+    <script src="availablebooks.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the library management system | Books</title>
+    <link rel="stylesheet" href="ebooks.css">
+</head>
+<body>
+    <header>
+        <img src="https://lib.cmb.ac.lk/wp-content/uploads/2016/09/logo-3.png" width="300">
+        <a href="#" class="logo">
+            <p>THE LIBRARY | Books| E-Books</p>
+        </a>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button type="button" onclick="toggleSearch()">Search</button>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="../home page/home.html">Home</a></li>
+                <li><a href="../help/help.html">Help</a></li>
+            </ul>
+        </nav>
+        
+    </header>
+
+    <h2> TITLE 01</h2>
+
+    <div class="book-container">
+        <!-- Book card 1 -->
+        <div class="book-card">
+            <img src="book1.png" alt="Book Title 1" class="book-image">
+            <div class="book-title">title</div>
+            <div class="book-container-button"><button type='button'> open </button></div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">description</div>
+        </div>
+
+        <!-- Book card 2 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+
+        <!-- Book card 3 -->
+        <div class="book-card">
+            <img src="book3.jpg" alt="Book Title 3" class="book-image">
+            <div class="book-title">Book Title 3</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+        <!-- Book card 4 -->
+        <div class="book-card">
+            <img src="book4.jpg" alt="Book Title 4" class="book-image">
+            <div class="book-title">Book Title 4</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 3, including its main ideas and
+                purpose.</div>
+        </div>
+
+        <!-- Book card 5 -->
+        <div class="book-card">
+            <img src="book5.png" alt="Book Title 1" class="book-image">
+            <div class="book-title">title</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">description</div>
+        </div>
+
+        <!-- Book card 6 -->
+        <div class="book-card">
+            <img src="book2.jpg" alt="Book Title 2" class="book-image">
+            <div class="book-title">Book Title 2</div>
+            <div class="arrow" onclick="toggleDescription(this)">&#9662;</div>
+            <div class="book-description">This is a short description of Book Title 2. It covers key themes and insights
+                from the book.</div>
+        </div>
+
+    </div>
+
+
+    <h1><br></h1>
+
+    <footer>
+
+        <p>&copy; 2024 University Library Management System</p>
+    </footer>
+    </body>
+    </html>

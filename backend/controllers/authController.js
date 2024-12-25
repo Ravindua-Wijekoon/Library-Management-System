@@ -24,11 +24,16 @@ exports.login = async (req, res) => {
             return res.status(401).send('Invalid credentials.');
         }
 
+        // Include user's name in the token payload
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, name: user.name, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
+
+        // Log the token to the console
+        console.log(`JWT Token for user ${user.name}:`, token);
+
         res.status(200).send({ token });
     } catch (error) {
         res.status(500).send('Error logging in.');

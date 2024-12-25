@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: #edecea;
+}
+
+.logo {
+    font-size: 1.2rem;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+.logo span {
+    color: var(--main-color);
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-container input[type="text"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 500px;
+}
+
+.search-container button {
+    background-color: #004080;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+main {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+table th {
+    background-color: #370a47;
+    color: white;
+}
+
+/* Style for the "Received" button */
+.received-button {
+    background-color:  #0a115d; /* Blue background */
+    color: white;             /* White text */
+    border: none;             /* Remove border */
+    padding: 8px 12px;        /* Padding for size */
+    border-radius: 4px;       /* Rounded corners */
+    font-size: 14px;          /* Text size */
+    cursor: pointer;          /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hover effects */
+}
+
+/* Hover effect */
+.received-button:hover {
+    background-color: #0a115d; /* Darker blue */
+    transform: scale(1.05);    /* Slightly enlarge the button */
+}
+
+/* Active button effect */
+.received-button:active {
+    background-color: #0a115d; /* Even darker blue */
+    transform: scale(0.95);    /* Slightly shrink for press effect */
+}
+
+.renew-button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.renew-button:hover {
+    background-color: #218c54;
+}
+
+
+footer {
+    background-color: #004080;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+

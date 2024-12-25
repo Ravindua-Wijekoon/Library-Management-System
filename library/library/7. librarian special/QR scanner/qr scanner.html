@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library QR Code Scanner</title>
+    <link rel="stylesheet" href="qr scanner.css">
+
+    <!-- Include the html5-qrcode library locally -->
+    <script src="html5-qrcode.min.js"></script>
+</head>
+
+
+    <body>
+        <header>
+            <img src="https://lib.cmb.ac.lk/wp-content/uploads/2016/09/logo-3.png" width="300">
+            <a href="#" class="logo">
+                <p>THE LIBRARY | QR scanner</p>
+            </a>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <button type="button" onclick="toggleSearch()">Search</button>
+            </div>
+
+            <div class="bx bx-menu" id="menu-icon"></div>
+            <ul class="navbar">
+                <li><a href="file:///C:\Users\GAYUMI\Desktop\library\home page\home.html">Home</a></li>
+                <li><a href="#Contact">Contact</a></li>
+            </ul>
+        </header>
+
+        <h2>Library QR Code Scanner</h2>
+        <div id="qr-reader"></div>
+        <div id="result">Scan a QR code to update book status</div>
+        <div id="date-time"></div>
+
+
+        <div id="student-form">
+            <h3>Enter Student Details</h3>
+            <form id="borrow-form">
+                <div class="form-input">
+                    <label for="student-name">Student Name:</label>
+                    <input type="text" id="student-name" name="student-name" placeholder="Enter student name" required>
+                </div>
+                <div class="form-input">
+                    <label for="student-id">Student ID:</label>
+                    <input type="text" id="student-id" name="student-id" placeholder="Enter student ID" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <button id="refresh-page" style="margin-top: 15px;">Add Another Book</button>
+
+        <h1><br></h1>
+        <script src="qr scanner.js"></script>
+
+        <footer>
+
+            <p>&copy; 2024 University Library Management System</p>
+        </footer>
+    </body>
+
+</html>

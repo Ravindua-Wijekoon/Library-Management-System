@@ -1,0 +1,116 @@
+header {
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px; 
+    background: #edecea;
+}
+
+.logo {
+    font-size: 1.2rem;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+.logo span {
+    color: var(--main-color);
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-container input[type="text"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 500px;
+}
+
+.search-container button {
+    background-color: #004080;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.book-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1000px;
+    padding: 20px;
+  }
+
+  
+  .book-card {
+    width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    text-align: center;
+    position: relative;
+  }
+
+  
+  .book-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  
+  .book-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  
+  .book-title {
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    background-color: #e8eff7;
+  }
+
+  
+  .arrow {
+    cursor: pointer;
+    font-size: 20px;
+    color: #0073e6;
+    margin-top: 5px;
+    transition: transform 0.3s;
+  }
+
+
+  .book-description {
+    display: none; /* Hidden by default */
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Rotate arrow */
+  .arrow.active {
+    transform: rotate(180deg);
+  }
+
+footer {
+    background-color: #004080;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position:fixed;
+    bottom: 0;
+    width: 100%;
+}

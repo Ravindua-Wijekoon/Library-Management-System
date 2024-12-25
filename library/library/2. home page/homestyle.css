@@ -1,0 +1,149 @@
+header {
+    position: relative;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 10px 100px;
+    background: #edecea;
+    animation: fadeInDown 1s ease-in-out;
+}
+navbar {
+    display: flex;
+    gap: 1rem;
+    padding: 10px;
+    
+}
+
+.navbar a {
+    color: #000000;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    align: right;
+}
+
+.navbar a:hover {
+    background-color: #e99ad0;
+    align: right;
+
+}
+.home {
+    width: 100%;
+    min-height: 80vh;
+    background-image: url(https://media.istockphoto.com/id/910852368/photo/student-searching-books.jpg?s=612x612&w=0&k=20&c=mwhm2PRXrVPoCjBUcNozECWs2w76SGTtIVZIkaDuiyM=);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+
+}
+
+.home-text h1 {
+    font-size: 2.7rem;
+    padding: 30px;
+    animation: slideInLeft 1.5s ease-in-out;
+}
+
+.home-text p {
+    font-size: 1rem;
+    margin: 0.4rem 0;
+    padding: 30px;
+}
+
+.home-text span {
+    color: #b62f92;
+    padding-bottom: 50px;
+}
+.search-container {
+    position: relative;
+}
+
+.search-container input[type="text"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 300px;
+}
+
+.search-container button {
+    background-color: #004080;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+h2 {
+    padding: 20px;
+    font-family:monospace;
+}
+
+p {
+    padding: 10px 10px 10px 10px;
+    font-family: sans-serif;
+}
+button:hover {
+    background-color: #e99ad0;
+
+}
+
+.img-btn-container {
+    display: flex;
+    justify-content: center; 
+    gap: 1rem; 
+    margin-top: 2rem;
+}
+.img-btn {
+    position: relative;
+    width: 200px; 
+    height: 200px; 
+    background-color: #ffffff; 
+    border: 2px solid #1a237e; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
+}
+.img-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease; 
+}
+.img-btn:hover {
+    transform: scale(1.1); 
+}
+.img-btn .img-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    padding: 10px;
+    border-radius: 5px; 
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.img-btn:hover .img-text {
+    opacity: 1;
+}
+
+footer {
+    background-color: #004080;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position:fixed;
+    bottom: 0;
+    width: 100%;
+}

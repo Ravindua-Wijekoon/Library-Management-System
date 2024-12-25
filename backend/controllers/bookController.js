@@ -1,6 +1,8 @@
 const Book = require('../models/Book');
 const Borrow = require('../models/Borrow');
 const qr = require('qrcode');
+const path = require('path');
+const fs = require('fs');
 
 // Get all books
 exports.getAllBooks = async (req, res) => {
@@ -15,17 +17,59 @@ exports.getAllBooks = async (req, res) => {
 // Add a new book
 exports.addBook = async (req, res) => {
     const { name, author, isbn, description } = req.body;
-    const image = req.file.path;
+
+    // Save relative path for the image
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+    if (!image) {
+        return res.status(400).send('Image is required.');
+    }
 
     try {
-        const qrCodeData = JSON.stringify({ name, author, isbn });
-        const qrCode = await qr.toDataURL(qrCodeData);
+        // Step 1: Save the book without the QR code
+        const book = new Book({
+            name,
+            author,
+            isbn,
+            description,
+            image,
+        });
 
-        const book = new Book({ name, author, isbn, description, image, qrCode });
-        await book.save();
-        res.status(201).send('Book added successfully.');
+        const savedBook = await book.save(); // Save book to get the `id`
+
+        // Step 2: Generate QR code with the book's `id`
+        const qrDir = path.join(__dirname, '../qr');
+        if (!fs.existsSync(qrDir)) {
+            fs.mkdirSync(qrDir);
+        }
+
+        const qrData = {
+            id: savedBook._id, // Include book `id`
+            name,
+            author,
+            isbn,
+            description: description || 'No description provided',
+        };
+
+        const qrFilePath = path.join(qrDir, `${isbn}-qr.png`);
+        const qrRelativePath = `/qr/${isbn}-qr.png`;
+
+        // Generate and save the QR code
+        await new Promise((resolve, reject) => {
+            qr.toFile(qrFilePath, JSON.stringify(qrData), (err) => {
+                if (err) reject(err);
+                resolve();
+            });
+        });
+
+        // Step 3: Update the book with the QR code path
+        savedBook.qrCode = qrRelativePath;
+        await savedBook.save();
+
+        res.status(201).send('Book added successfully with QR code.');
     } catch (error) {
-        res.status(400).send('Error adding book.');
+        console.error('Error adding book:', error);
+        res.status(500).send('Error adding book.');
     }
 };
 
