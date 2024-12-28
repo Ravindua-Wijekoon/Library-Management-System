@@ -7,6 +7,8 @@ import SignUpPage from './pages/SignUpPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import BooksPage from './pages/BooksPage';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
 const App = () => {
   const navigate = useNavigate();
@@ -32,20 +34,22 @@ const App = () => {
   }, [navigate]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute requiredRole="admin">
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/books" element={<BooksPage />}/>
-    </Routes>
+    <ThemeProvider theme={theme}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/books" element={<BooksPage />}/>
+      </Routes>
+    </ThemeProvider>
   );
 };
 

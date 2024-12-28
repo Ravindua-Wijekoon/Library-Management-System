@@ -17,11 +17,9 @@ import { useDropzone } from 'react-dropzone';
 import * as Yup from 'yup';
 import Cropper from 'react-easy-crop';
 import { getCroppedImg } from '../components/crop';
-import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import config from '../config';
-import theme from '../theme';
 
 const AdminDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -156,7 +154,7 @@ const AdminDashboard = () => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -300,7 +298,7 @@ const AdminDashboard = () => {
           </DialogActions>
         </Dialog>
       </Container>
-    </ThemeProvider>
+    </Box>
   );
 };
 

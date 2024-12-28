@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import libBack from '../assets/images/libBack.jpg';
 import theme from '../theme';
+import Swal from 'sweetalert2';
 
 const HomePage = () => {
   const [userName, setUserName] = useState('');
@@ -34,14 +35,59 @@ const HomePage = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    alert('Logged out successfully!');
-    window.location.href = '/';
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'swal2-custom-z-index', // Add custom z-index class here
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('token');
+        Swal.fire('Logged Out!', 'You have been successfully logged out.', 'success').then(() => {
+          window.location.href = '/';
+        });
+      }
+    });
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth={false} style={{ padding: 0 }}>
+
+        {/* Navbar */}
+        <AppBar position="sticky" sx={{ padding: '0.5rem', boxShadow: 4 }}>
+          <Toolbar>
+            <div style={{ flexGrow: 1 }}>
+              <img
+                src="https://lib.cmb.ac.lk/wp-content/uploads/2016/09/logo-3.png"
+                alt="Library Logo"
+                style={{ maxWidth: '180px' }}
+              />
+            </div>
+            {userName ? (
+              <>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  Welcome, <strong>{userName}</strong>
+                </Typography>
+                <Button color="inherit" variant="outlined" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button color="inherit" href="/login" variant="outlined">
+                Login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+
         {/* Header Section */}
         <Box
           display="flex"
@@ -74,38 +120,21 @@ const HomePage = () => {
           </Grid>
         </Box>
 
-        {/* Navbar Section */}
-        <AppBar position="sticky" sx={{ marginBottom: '2rem', padding: '0.5rem' }}>
-          <Toolbar>
-            <div style={{ flexGrow: 1 }}>
-              <img
-                src="https://lib.cmb.ac.lk/wp-content/uploads/2016/09/logo-3.png"
-                alt="Library Logo"
-                style={{ maxWidth: '200px' }}
-              />
-            </div>
-            {userName ? (
-              <>
-                <Typography variant="body1" sx={{ marginRight: 2 }}>
-                  Welcome, {userName}
-                </Typography>
-                <Button color="inherit" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <Button color="inherit" href="/login">
-                Login
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
+        
 
         {/* Card Section */}
         <Box paddingX="5rem">
           <Grid container mt={2} spacing={4} justifyContent="center">
             <Grid item xs={12} sm={6} md={3}>
-              <Card onClick={() => navigate('/books')} style={{ cursor: 'pointer' }}>
+              <Card 
+                onClick={() => navigate('/books')} 
+                sx={{
+                  cursor: 'pointer',
+                  boxShadow: 6,
+                  transition: 'transform 0.3s',
+                  '&:hover': { transform: 'scale(1.05)' },
+                }}
+              >
                 <CardMedia
                   component="img"
                   height="300"
@@ -121,7 +150,14 @@ const HomePage = () => {
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card
+                sx={{
+                  cursor: 'pointer',
+                  boxShadow: 6,
+                  transition: 'transform 0.3s',
+                  '&:hover': { transform: 'scale(1.05)' },
+                }}
+              >
                 <CardMedia
                   component="img"
                   height="300"
@@ -137,7 +173,14 @@ const HomePage = () => {
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card
+                sx={{
+                  cursor: 'pointer',
+                  boxShadow: 6,
+                  transition: 'transform 0.3s',
+                  '&:hover': { transform: 'scale(1.05)' },
+                }}
+              >
                 <CardMedia
                   component="img"
                   height="300"
@@ -154,23 +197,23 @@ const HomePage = () => {
           </Grid>
         </Box>
 
-        {/* Footer Section */}
-        <Box paddingX={5} marginTop="4rem">
-          <Typography variant="h6">Contact Details</Typography>
-          <Typography variant="body2" color="textSecondary">
+        {/* Footer */}
+        <Box paddingX={5} marginTop={8} textAlign="center">
+          <Typography variant="h6">Contact Us</Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
             Faculty of Technology,<br />
             University of Colombo,<br />
-            Mahenwatta, Pitipana,<br />
-            Homagama,<br /> Sri Lanka.
+            Mahenwatta, Pitipana, Homagama,<br /> Sri Lanka.
+          </Typography>
+        </Box>
+
+        <Box textAlign="center" padding="1rem" bgcolor="#f5f5f5" marginTop={4}>
+          <Typography variant="body2" color="textSecondary">
+            &copy; {new Date().getFullYear()} Library Management System. All rights reserved.
           </Typography>
         </Box>
       </Container>
-
-      <Box textAlign="center" padding="2rem" marginTop="2rem" bgcolor="#f5f5f5">
-        <Typography variant="body2" color="textSecondary">
-          &copy; {new Date().getFullYear()} Library Management System. All rights reserved.
-        </Typography>
-      </Box>
+      
     </ThemeProvider>
   );
 };
