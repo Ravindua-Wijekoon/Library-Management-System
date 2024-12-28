@@ -155,3 +155,17 @@ exports.returnBook = async (req, res) => {
         res.status(500).send('Error returning book.');
     }
 };
+
+// Get a single book by ID
+exports.getBookById = async (req, res) => {
+    const { bookId } = req.params;
+
+    try {
+        const book = await Book.findById(bookId);
+        if (!book) return res.status(404).send('Book not found.');
+
+        res.status(200).json(book);
+    } catch (error) {
+        res.status(500).send('Error fetching the book.');
+    }
+};

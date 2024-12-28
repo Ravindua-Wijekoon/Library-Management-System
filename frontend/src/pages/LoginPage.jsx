@@ -50,7 +50,7 @@ const LoginPage = () => {
         // Decode the token to get the user role
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (payload.role === 'admin') {
-          navigate('/admin'); // Redirect to Admin Dashboard
+          navigate('/admin-dashboard'); // Redirect to Admin Dashboard
         } else {
           navigate('/'); // Redirect to Home Page
         }

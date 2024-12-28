@@ -2,11 +2,17 @@ const jwt = require('jsonwebtoken');
 
 // Middleware for verifying JWT
 const authenticate = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(403).send('Token is required.');
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(403).send('Token is required.');
+
+    const token = authHeader.split(' ')[1]; // Extract the token
+    if (!token) return res.status(403).send('Token is missing.');
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) return res.status(403).send('Invalid token.');
+        if (err) {
+            console.error('JWT verification failed:', err.message);
+            return res.status(403).send('Invalid or expired token.');
+        }
         req.user = decoded;
         next();
     });

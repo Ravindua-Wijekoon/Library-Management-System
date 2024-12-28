@@ -8,6 +8,7 @@ const {
     deleteBook,
     releaseBook,
     returnBook,
+    getBookById,
 } = require('../controllers/bookController');
 const { authenticate, isAdmin } = require('../middlewares/authenticate');
 
@@ -45,5 +46,6 @@ router.put('/:bookId', authenticate, isAdmin, updateBook); // Update book detail
 router.delete('/:bookId', authenticate, isAdmin, deleteBook); // Delete a book
 router.post('/release', authenticate, isAdmin, releaseBook); // Release a book to a user
 router.post('/return', authenticate, isAdmin, returnBook); // Return a book
+router.get('/:bookId', getBookById);
 
 module.exports = router;

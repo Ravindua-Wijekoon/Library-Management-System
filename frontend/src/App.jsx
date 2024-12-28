@@ -7,6 +7,7 @@ import SignUpPage from './pages/SignUpPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import BooksPage from './pages/BooksPage';
+import ReleaseBook from './pages/ReleaseBook';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 
@@ -40,7 +41,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route
-          path="/admin"
+          path="/admin-dashboard"
           element={
             <ProtectedRoute requiredRole="admin">
               <AdminDashboard />
@@ -48,6 +49,7 @@ const App = () => {
           }
         />
         <Route path="/books" element={<BooksPage />}/>
+        <Route path="/release-book" element={<ReleaseBook />}/>
       </Routes>
     </ThemeProvider>
   );

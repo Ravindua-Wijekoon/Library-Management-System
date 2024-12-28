@@ -20,6 +20,7 @@ import { getCroppedImg } from '../components/crop';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import config from '../config';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -29,6 +30,7 @@ const AdminDashboard = () => {
   const [zoom, setZoom] = useState(1);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [isCropComplete, setIsCropComplete] = useState(false); // Tracks if cropping is complete
+  const navigate = useNavigate();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -54,6 +56,10 @@ const AdminDashboard = () => {
     setCroppedImage(null);
     setIsCropComplete(false);
     setCropModalOpen(false); // Close the crop dialog
+  };
+
+  const handleNavigateToReleaseBook = () => {
+    navigate('/release-book');
   };
 
   const handleSaveCrop = () => {
@@ -153,6 +159,29 @@ const AdminDashboard = () => {
     },
   });
 
+  const handleLogout = () => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You will be logged out!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, log out!',
+          cancelButtonText: 'Cancel',
+          customClass: {
+            popup: 'swal2-custom-z-index', // Add custom z-index class here
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.removeItem('token');
+            Swal.fire('Logged Out!', 'You have been successfully logged out.', 'success').then(() => {
+              window.location.href = '/';
+            });
+          }
+        });
+      };
+
   return (
     <Box>
       <AppBar position="static">
@@ -160,13 +189,7 @@ const AdminDashboard = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Admin Dashboard
           </Typography>
-          <Button
-            color="inherit"
-            onClick={() => {
-              localStorage.removeItem('token');
-              window.location.href = '/';
-            }}
-          >
+          <Button color="inherit" variant="outlined" onClick={handleLogout}>
             Logout
           </Button>
         </Toolbar>
@@ -178,6 +201,15 @@ const AdminDashboard = () => {
         </Typography>
         <Button variant="contained" color="primary" onClick={handleOpen}>
           Add Book
+        </Button>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleNavigateToReleaseBook}
+          sx={{ ml: 2 }}
+        >
+          Release Book
         </Button>
 
         {/* Dialog for Adding a Book */}
