@@ -52,8 +52,8 @@ exports.addBook = async (req, res) => {
             description: description || 'No description provided',
         };
 
-        const qrFilePath = path.join(qrDir, `${isbn}-qr.png`);
-        const qrRelativePath = `/qr/${isbn}-qr.png`;
+        const qrFilePath = path.join(qrDir, `${name}-${savedBook._id}-qr.png`);
+        const qrRelativePath = `/qr/${name}-${savedBook._id}-qr.png`;
 
         // Generate and save the QR code
         await new Promise((resolve, reject) => {
@@ -75,25 +75,25 @@ exports.addBook = async (req, res) => {
 };
 
 // Update a book
-exports.updateBook = async (req, res) => {
-    const { bookId } = req.params;
-    const { name, author, isbn, description } = req.body;
+// exports.updateBook = async (req, res) => {
+//     const { bookId } = req.params;
+//     const { name, author, isbn, description } = req.body;
 
-    try {
-        const book = await Book.findById(bookId);
-        if (!book) return res.status(404).send('Book not found.');
+//     try {
+//         const book = await Book.findById(bookId);
+//         if (!book) return res.status(404).send('Book not found.');
 
-        book.name = name || book.name;
-        book.author = author || book.author;
-        book.isbn = isbn || book.isbn;
-        book.description = description || book.description;
+//         book.name = name || book.name;
+//         book.author = author || book.author;
+//         book.isbn = isbn || book.isbn;
+//         book.description = description || book.description;
 
-        await book.save();
-        res.status(200).send('Book updated successfully.');
-    } catch (error) {
-        res.status(400).send('Error updating book.');
-    }
-};
+//         await book.save();
+//         res.status(200).send('Book updated successfully.');
+//     } catch (error) {
+//         res.status(400).send('Error updating book.');
+//     }
+// };
 
 // Delete a book
 exports.deleteBook = async (req, res) => {
@@ -103,10 +103,31 @@ exports.deleteBook = async (req, res) => {
         const book = await Book.findById(bookId);
         if (!book) return res.status(404).send('Book not found.');
 
+        // Delete the QR code image if it exists
+        if (book.qrCode) {
+            const qrFilePath = path.join(__dirname, '..', book.qrCode);
+            if (fs.existsSync(qrFilePath)) {
+                fs.unlinkSync(qrFilePath); // Delete the QR code file
+            }
+        }
+
+        // Delete the book's image if it exists
+        if (book.image) {
+            const imageFilePath = path.join(__dirname, '..', book.image);
+            if (fs.existsSync(imageFilePath)) {
+                fs.unlinkSync(imageFilePath); // Delete the image file
+            }
+        }
+
+        // Delete borrow records related to the book
         await Borrow.deleteMany({ book: bookId });
-        await book.remove();
-        res.status(200).send('Book deleted successfully.');
+
+        // Delete the book document
+        await Book.findByIdAndDelete(bookId);
+
+        res.status(200).send('Book and associated files deleted successfully.');
     } catch (error) {
+        console.error('Error deleting book:', error);
         res.status(500).send('Error deleting book.');
     }
 };

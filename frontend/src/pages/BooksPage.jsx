@@ -36,6 +36,7 @@ const BooksPage = () => {
   const [userRole, setUserRole] = useState('user');
   const [selectedBook, setSelectedBook] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -62,7 +63,62 @@ const BooksPage = () => {
     }
 
     fetchBooks();
-  }, []);
+  }, [refresh]);
+
+  const handleDeleteBook = async (bookId) => {
+    const confirmDelete = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this book!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        container: 'swal2-custom-z-index', 
+      },
+    });
+  
+    if (confirmDelete.isConfirmed) {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`${config.apiUrl}/api/books/${bookId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setBooks((prevBooks) => prevBooks.filter((book) => book._id !== bookId)); // Update state
+        setDialogOpen(false); // Close the dialog
+  
+        // Success alert
+        await Swal.fire({
+          title: 'Deleted!',
+          text: 'The book and its associated QR code have been successfully deleted.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          customClass: {
+            container: 'swal2-custom-z-index', 
+          },
+        });
+        setRefresh((prev) => !prev);
+      } catch (error) {
+        console.error('Failed to delete book:', error);
+  
+        // Error alert
+        await Swal.fire({
+          title: 'Error!',
+          text: 'Failed to delete the book. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          customClass: {
+            container: 'swal2-custom-z-index', 
+          },
+        });
+      }
+    }
+  };
+  
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -94,7 +150,7 @@ const BooksPage = () => {
         confirmButtonText: 'Yes, log out!',
         cancelButtonText: 'Cancel',
         customClass: {
-          popup: 'swal2-custom-z-index', // Add custom z-index class here
+          popup: 'swal2-custom-z-index',
         },
       }).then((result) => {
         if (result.isConfirmed) {
@@ -371,8 +427,17 @@ const BooksPage = () => {
             )}
           </DialogContent>
           <Divider />
-          <DialogActions sx={{p: 2 }}>
-            <Button onClick={handleCloseDialog} color="error" variant="contained">
+          <DialogActions sx={{ p: 2 }}>
+            {userRole === 'admin' && selectedBook && (
+              <Button
+                color="error"
+                variant="contained"
+                onClick={() => handleDeleteBook(selectedBook._id)}
+              >
+                Delete
+              </Button>
+            )}
+            <Button onClick={handleCloseDialog} color="primary" variant="contained">
               Close
             </Button>
           </DialogActions>

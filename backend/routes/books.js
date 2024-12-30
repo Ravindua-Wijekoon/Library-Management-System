@@ -4,7 +4,6 @@ const path = require('path');
 const {
     getAllBooks,
     addBook,
-    updateBook,
     deleteBook,
     releaseBook,
     returnBook,
@@ -42,7 +41,7 @@ const router = express.Router();
 // Routes
 router.get('/', getAllBooks); // Get all books
 router.post('/', authenticate, isAdmin, upload.single('image'), addBook); // Add a new book with image
-router.put('/:bookId', authenticate, isAdmin, updateBook); // Update book details
+//router.put('/:bookId', authenticate, isAdmin, updateBook); // Update book details
 router.delete('/:bookId', authenticate, isAdmin, deleteBook); // Delete a book
 router.post('/release', authenticate, isAdmin, releaseBook); // Release a book to a user
 router.post('/return', authenticate, isAdmin, returnBook); // Return a book

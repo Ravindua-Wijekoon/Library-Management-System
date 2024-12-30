@@ -339,7 +339,9 @@ const ManageBook = () => {
             fullWidth
             size="small"
             value={formik.values.author}
-            disabled
+            InputProps={{
+              readOnly: true,
+            }}
             sx={{ mt: 2 }}
           />
 
@@ -349,8 +351,10 @@ const ManageBook = () => {
             fullWidth
             size="small"
             value={formik.values.isbn}
-            disabled
             sx={{ mt: 2 }}
+            InputProps={{
+              readOnly: true,
+            }}
           />
 
           <TextField
