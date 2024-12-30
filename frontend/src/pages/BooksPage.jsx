@@ -50,8 +50,6 @@ const BooksPage = () => {
       }
     };
 
-    
-
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -144,7 +142,17 @@ const BooksPage = () => {
   }
 
   return (
-    <Box>
+    <Box
+    sx={{
+      backgroundImage: 'url(https://your-image-url.jpg)', // Replace with your image URL or import path
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh', // Ensures it covers the viewport height
+      display: 'flex',
+      flexDirection: 'column', // Ensure children stack properly
+    }}
+    >
       
       {/* Navbar */}
               <AppBar position="sticky" sx={{ padding: '0.5rem', boxShadow: 4 }}>
@@ -225,9 +233,22 @@ const BooksPage = () => {
                       {book.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" noWrap>
-                      {book.author}
+                      by {book.author}
                     </Typography>
                   </CardContent>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      color: 'white',
+                      backgroundColor: book.available ? 'green' : 'error.main',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      padding: '4px 8px', // Padding inside the background
+                    }}
+                  >
+                    {book.available ? 'Available' : 'Not Available'}
+                  </Typography>
                 </Card>
               </Grid>
             ))}

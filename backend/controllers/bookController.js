@@ -1,4 +1,5 @@
 const Book = require('../models/Book');
+const User = require('../models/User');
 const Borrow = require('../models/Borrow');
 const qr = require('qrcode');
 const path = require('path');
@@ -115,21 +116,50 @@ exports.releaseBook = async (req, res) => {
     const { bookId, userId } = req.body;
 
     try {
+        // Check if the book exists and is available
         const book = await Book.findById(bookId);
-        if (!book || !book.available) return res.status(400).send('Book is not available.');
+        if (!book || !book.available) {
+            return res.status(400).send('Book is not available.');
+        }
 
+        // Check if the user exists in the database
+        console.log("helooo", userId)
+        const user = await User.findOne({ index: userId });
+        if (!user) {
+            console.log('User with this index does not exist.')
+            return res.status(404).send('User with this index does not exist.');
+        }
+
+        // Check if the user already has an active borrowed book
+        const activeBorrow = await Borrow.findOne({
+            user: user._id,
+            status: 'borrowed',
+        });
+
+        if (activeBorrow) {
+            return res.status(400).send('User must return the previously borrowed book before borrowing another.');
+        }
+
+        // Proceed with releasing the book
         book.available = false;
-        book.borrowedBy = userId;
+        book.borrowedBy = user._id;
         await book.save();
 
-        const borrow = new Borrow({ book: bookId, user: userId, borrowedDate: new Date() });
+        const borrow = new Borrow({
+            book: bookId,
+            user: user._id,
+            borrowedDate: new Date(),
+        });
         await borrow.save();
 
         res.status(200).send('Book released successfully.');
     } catch (error) {
+        console.error('Error releasing book:', error);
         res.status(500).send('Error releasing book.');
     }
 };
+
+
 
 // Return a book
 exports.returnBook = async (req, res) => {

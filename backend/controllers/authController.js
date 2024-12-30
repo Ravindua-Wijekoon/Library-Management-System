@@ -4,10 +4,15 @@ const User = require('../models/User');
 
 // Register a new user
 exports.register = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role, index } = req.body;
     try {
+        const existingUser = await User.findOne({ index });
+        if (existingUser) {
+            return res.status(400).send('Index number already exists.');
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ name, email, password: hashedPassword, role });
+        const user = new User({ firstName, lastName, email, password: hashedPassword, role, index });
         await user.save();
         res.status(201).send('User registered successfully.');
     } catch (error) {
@@ -26,7 +31,7 @@ exports.login = async (req, res) => {
 
         // Include user's name in the token payload
         const token = jwt.sign(
-            { id: user._id, name: user.name, role: user.role },
+            { id: user._id, name: user.firstName, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );

@@ -7,7 +7,7 @@ import SignUpPage from './pages/SignUpPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import BooksPage from './pages/BooksPage';
-import ReleaseBook from './pages/ReleaseBook';
+import ManageBook from './pages/ManageBook';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 
@@ -49,7 +49,7 @@ const App = () => {
           }
         />
         <Route path="/books" element={<BooksPage />}/>
-        <Route path="/release-book" element={<ReleaseBook />}/>
+        <Route path="/manage-book" element={<ManageBook />}/>
       </Routes>
     </ThemeProvider>
   );

@@ -1,22 +1,28 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware for verifying JWT
 const authenticate = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    if (!authHeader) return res.status(403).send('Token is required.');
-
-    const token = authHeader.split(' ')[1]; // Extract the token
-    if (!token) return res.status(403).send('Token is missing.');
-
+    if (!authHeader) {
+        console.log('Authorization header is missing');
+        return res.status(401).json({ error: 'Authorization header is missing.' });
+    }
+    const tokenParts = authHeader.split(' ');
+    if (tokenParts[0] !== 'Bearer' || tokenParts.length !== 2) {
+        console.log('Invalid token format', authHeader);
+        return res.status(401).json({ error: 'Invalid token format. Expected "Bearer <token>".' });
+    }
+    const token = tokenParts[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            console.error('JWT verification failed:', err.message);
-            return res.status(403).send('Invalid or expired token.');
+            console.log('Token verification error:', err.message);
+            return res.status(403).json({ error: 'Invalid or expired token.', details: err.message });
         }
         req.user = decoded;
         next();
     });
 };
+
+
 
 // Middleware for checking admin role
 const isAdmin = (req, res, next) => {

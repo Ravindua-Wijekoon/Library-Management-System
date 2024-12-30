@@ -198,9 +198,17 @@ const HomePage = () => {
         </Box>
 
         {/* Footer */}
-        <Box paddingX={5} marginTop={8} textAlign="center">
-          <Typography variant="h6">Contact Us</Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
+        <Box 
+          paddingX={5} 
+          marginTop={8} 
+          textAlign="center" 
+          sx={{
+            backgroundColor: 'primary.main', 
+            paddingY: 3, 
+          }}
+        >
+          <Typography variant="h6" color="white">Contact Us</Typography>
+          <Typography variant="body2" color="white" sx={{ marginTop: 1 }}>
             Faculty of Technology,<br />
             University of Colombo,<br />
             Mahenwatta, Pitipana, Homagama,<br /> Sri Lanka.
