@@ -366,7 +366,7 @@ const ManageBook = () => {
             sx={{ mt: 2 }}
           />
 
-          <Box sx={{ textAlign: 'right', mt: 2 }}>
+          <Box sx={{ textAlign: 'right', mt: 2, mb:4 }}>
             {selectedBook?.available ? (
               <Button variant="contained" color="secondary" onClick={handleReleaseBook}>
                 Release Book
