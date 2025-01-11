@@ -17,6 +17,7 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
+  DialogTitle,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
@@ -25,6 +26,7 @@ import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
+import { DataGrid } from '@mui/x-data-grid';
 
 const BooksPage = () => {
   const [books, setBooks] = useState([]);
@@ -37,6 +39,9 @@ const BooksPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [borrowedBooks, setBorrowedBooks] = useState([]);
+  const [loadingBorrowedBooks, setLoadingBorrowedBooks] = useState(false);
+  const [borrowedBooksDialogOpen, setBorrowedBooksDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -162,6 +167,53 @@ const BooksPage = () => {
       });
     };
 
+    const handleOpenBorrowedBooksDialog = async () => {
+      const token = localStorage.getItem('token');
+    
+      if (!token) {
+        setError('Authentication token is missing. Please log in again.');
+        console.error('Authentication token is missing.');
+        return;
+      }
+    
+      setLoadingBorrowedBooks(true);
+    
+      try {
+        const decodedToken = jwtDecode(token);
+    
+        // Check if the necessary fields exist in the token
+        if (!decodedToken || !decodedToken.id) {
+          setError('Invalid token. Please log in again.');
+          console.error('Invalid token structure:', decodedToken);
+          return;
+        }
+    
+        const response = await axios.get(
+          `${config.apiUrl}/api/borrow/${decodedToken.id}`, // Use `id` from token
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Ensure the token is included
+            },
+          }
+        );
+    
+        setBorrowedBooks(response.data);
+        setBorrowedBooksDialogOpen(true);
+      } catch (error) {
+        setError('Failed to fetch borrowed books.');
+        console.error('Error fetching borrowed books:', error);
+      } finally {
+        setLoadingBorrowedBooks(false);
+      }
+    };
+    
+    
+    
+  const handleCloseBorrowedBooksDialog = () => {
+    setBorrowedBooksDialogOpen(false);
+    setBorrowedBooks([]);
+  };
+
   if (loading) {
     return (
       <Container>
@@ -220,11 +272,28 @@ const BooksPage = () => {
                       style={{ maxWidth: '180px' }}
                     />
                   </div>
+
+                  
+
                   {userName ? (
                     <>
                       <Typography variant="body1" sx={{ marginRight: 2 }}>
                         Welcome, <strong>{userName}</strong>
                       </Typography>
+                      
+
+                      {/* Conditionally Render "Borrowed Books" Button */}
+                      {userRole === 'user' && (
+                        <Button
+                          color="inherit"
+                          variant="outlined"
+                          onClick={handleOpenBorrowedBooksDialog}
+                          sx={{ marginRight: 2 }}
+                        >
+                          Borrowed Books
+                        </Button>
+                      )}
+
                       <Button color="inherit" variant="outlined" onClick={handleLogout}>
                         Logout
                       </Button>
@@ -443,6 +512,212 @@ const BooksPage = () => {
           </DialogActions>
         </Dialog>
       )}
+
+      {/* Borrowed books popup */}
+      <Dialog
+        open={borrowedBooksDialogOpen}
+        onClose={handleCloseBorrowedBooksDialog}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+          Your Borrowed Books
+        </DialogTitle>
+        <DialogContent>
+          {loadingBorrowedBooks ? (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              minHeight="200px"
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              {/* Borrowed Items Section */}
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+                Currently Borrowed
+              </Typography>
+              {borrowedBooks.filter((book) => book.status === 'borrowed').length > 0 ? (
+                <Grid container spacing={3} mb={4}>
+                  {borrowedBooks
+                    .filter((book) => book.status === 'borrowed')
+                    .map((borrowedBook) => (
+                      <Grid item xs={12} sm={6} md={6} key={borrowedBook.id}>
+                        <Card
+                          sx={{
+                            borderRadius: '12px',
+                            boxShadow: 4,
+                            backgroundColor:'#004080',
+                            transition: 'transform 0.2s',
+                            '&:hover': { transform: 'scale(1.05)' },
+                          }}
+                        >
+                          <CardContent>
+                            <Typography color='white' variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+                              {borrowedBook.book.name}
+                            </Typography>
+                            <Typography color='white' variant="body2" sx={{ mb: 1 }}>
+                              Borrowed Date:{' '}
+                              {borrowedBook.borrowedDate
+                                ? new Date(borrowedBook.borrowedDate).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                  })
+                                : 'N/A'}
+                            </Typography>
+                            <Typography color='white' variant="body2">
+                              Deadline Date:{' '}
+                              {borrowedBook.deadlineDate
+                                ? new Date(borrowedBook.deadlineDate).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                  })
+                                : 'N/A'}
+                            </Typography>
+
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                </Grid>
+              ) : (
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  textAlign="center"
+                  sx={{ mb: 4 }}
+                >
+                  No currently borrowed books.
+                </Typography>
+              )}
+
+              <Divider sx={{ my: 4 }} />
+
+              {/* Borrowed History Section */}
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+                Borrowed History
+              </Typography>
+              {borrowedBooks.filter((book) => book.status === 'returned').length > 0 ? (
+                <Box
+                sx={{
+                  mt: 2,
+                  height: 400,
+                  width: '100%',
+                  background: '#fff',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  overflowX: 'auto', // Enable horizontal scrolling
+                }}
+              >
+                <DataGrid
+                  rows={borrowedBooks.filter((book) => book.status === 'returned').map((book) => ({
+                    id: book._id,
+                    bookName: book.book.name,
+                    borrowedDate: book.borrowedDate,
+                    returnedDate: book.returnedDate,
+                    
+                  }))}
+                  columns={[
+                    { field: 'bookName', headerName: '📘 Book Name', flex: 1, minWidth: 150 },
+                    {
+                      field: 'borrowedDate',
+                      headerName: '📅 Borrowed Date',
+                      flex: 1,
+                      minWidth: 150,
+                      valueFormatter: (params) => {
+                        return params
+                          ? new Date(params).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })
+                          : 'N/A';
+                      },
+                    },
+                    {
+                      field: 'returnedDate',
+                      headerName: '📅 Returned Date',
+                      flex: 1,
+                      minWidth: 150,
+                      valueFormatter: (params) => {
+                        return params
+                          ? new Date(params).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })
+                          : 'N/A';
+                      },
+                    },
+                    
+                  ]}
+                  pageSize={5}
+                  rowsPerPageOptions={[5, 10, 15]}
+                  disableSelectionOnClick
+                  sx={{
+                    '& .MuiDataGrid-columnHeaders': {
+                      background: 'white',
+                      color: '#000',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      borderBottom: '2px solid #e3f2fd',
+                    },
+                    '& .MuiDataGrid-cell': {
+                      background: '#f9fbfa',
+                      color: '#333',
+                      fontSize: '14px',
+                      padding: '8px',
+                      alignItems: 'center',
+                    },
+                    '& .MuiDataGrid-row': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                    '& .MuiDataGrid-row:hover': {
+                      background: '#e3f2fd',
+                      cursor: 'pointer',
+                    },
+                    '& .MuiDataGrid-footerContainer': {
+                      background: '#fafafa',
+                      borderTop: '1px solid #e0e0e0',
+                      padding: '10px',
+                    },
+                    border: 'none',
+                  }}
+                />
+              </Box>
+              
+              ) : (
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  textAlign="center"
+                  sx={{ mt: 2 }}
+                >
+                  No borrowed history found.
+                </Typography>
+              )}
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleCloseBorrowedBooksDialog}
+            color="primary"
+            variant="contained"
+            
+            sx={{ borderRadius: '8px', fontWeight: 'bold', mt:1 ,mb:1, mr:1}}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
 
       <ToastContainer position="bottom-left" />
     </Box>

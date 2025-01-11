@@ -5,7 +5,9 @@ const BorrowSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     borrowedDate: { type: Date, default: Date.now },
     returnedDate: { type: Date, default: null },
-    status: { type: String, enum: ['borrowed', 'returned'], default: 'borrowed' }
+    deadlineDate: { type: Date, required: true },
+    status: { type: String, enum: ['borrowed', 'returned'], default: 'borrowed' },
+    extended: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Borrow', BorrowSchema);

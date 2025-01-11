@@ -43,6 +43,7 @@ const AdminDashboard = () => {
   const [zoom, setZoom] = useState(1);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [isCropComplete, setIsCropComplete] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -227,7 +228,6 @@ const AdminDashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("hello", response);
       setBorrowedBooks(response.data);
     } catch (error) {
       console.error('Failed to fetch borrowed books:', error);
@@ -257,6 +257,94 @@ const AdminDashboard = () => {
 
   const handleNavigateToManageBook = () => {
     navigate('/manage-book');
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value); // Update the search query
+  };
+  
+  // Filter borrowed books based on the search query
+  const filteredBorrowedBooks = borrowedBooks.filter((book) =>
+    book.userIndex.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleExtendDeadline = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User is not authenticated.');
+      }
+  
+      // Find the record to extend
+      const record = borrowedBooks.find((book) => book.id === id);
+      if (!record) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Record not found.',
+          confirmButtonText: 'OK',
+          customClass: {
+            container: 'swal2-custom-z-index',
+          },
+        });
+        return;
+      }
+  
+      if (record.extended) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Already Extended',
+          text: 'This deadline has already been extended.',
+          confirmButtonText: 'OK',
+          customClass: {
+            container: 'swal2-custom-z-index',
+          },
+        });
+        return;
+      }
+  
+      const newDeadline = new Date(record.deadlineDate);
+      newDeadline.setDate(newDeadline.getDate() + 7); // Extend by 7 days
+  
+      // Update the backend
+      const response = await axios.put(
+        `${config.apiUrl}/api/borrow/${id}/extend-deadline`,
+        { deadlineDate: newDeadline },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      // Update the state
+      setBorrowedBooks((prev) =>
+        prev.map((book) =>
+          book.id === id ? { ...book, deadlineDate: newDeadline, extended: true } : book
+        )
+      );
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Deadline Extended',
+        text: 'The deadline has been successfully extended by 7 days.',
+        confirmButtonText: 'OK',
+        customClass: {
+          container: 'swal2-custom-z-index',
+        },
+      });
+    } catch (error) {
+      console.error('Failed to extend deadline:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data || 'Failed to extend the deadline. Please try again.',
+        confirmButtonText: 'OK',
+        customClass: {
+          container: 'swal2-custom-z-index',
+        },
+      });
+    }
   };
 
   return (
@@ -422,7 +510,7 @@ const AdminDashboard = () => {
                   open={borrowedBooksOpen}
                   onClose={handleCloseBorrowedBooks}
                   fullWidth
-                  maxWidth="md"
+                  maxWidth="lg"
                 >
                   <DialogTitle sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
                     Currently Borrowed Books
@@ -434,6 +522,15 @@ const AdminDashboard = () => {
                       padding: '20px',
                     }}
                   >
+                    <TextField
+                      fullWidth
+                      label="Search by User Index"
+                      variant="outlined"
+                      size='small'
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      sx={{ marginY: 1 }}
+                    />
                     {loading ? (
                       <Box display="flex" justifyContent="center" alignItems="center" height="200px">
                         <Typography variant="h6">Loading borrowed books...</Typography>
@@ -441,20 +538,20 @@ const AdminDashboard = () => {
                     ) : (
                       <Box
                         sx={{
-                          mt:2,
+                          mt: 2,
                           height: 400,
                           width: '100%',
                           background: '#fff',
                           borderRadius: '12px',
                           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                          overflow: 'hidden',
+                          overflowX: 'auto', // Enable horizontal scrolling
                         }}
                       >
                         <DataGrid
-                          rows={borrowedBooks}
+                          rows={filteredBorrowedBooks}
                           columns={[
-                            { field: 'bookName', headerName: '📘 Book Name', flex: 1 },
-                            { field: 'userIndex', headerName: '🧑‍💻 User Index', flex: 1 },
+                            { field: 'bookName', headerName: '📘 Book Name', minWidth: 150 }, // Set minWidth
+                            { field: 'userIndex', headerName: '🧑‍💻 User Index', minWidth: 120 }, // Set minWidth
                             {
                               field: 'borrowedDate',
                               headerName: '📅 Borrowed Date',
@@ -467,6 +564,34 @@ const AdminDashboard = () => {
                                       day: 'numeric',
                                     })
                                   : 'N/A',
+                            },
+                            {
+                              field: 'deadlineDate',
+                              headerName: '📅 Deadline',
+                              flex: 1,
+                              valueFormatter: (params) =>
+                                params
+                                  ? new Date(params).toLocaleDateString('en-US', {
+                                      year: 'numeric',
+                                      month: 'long',
+                                      day: 'numeric',
+                                    })
+                                  : 'N/A',
+                            },
+                            {
+                              field: 'actions',
+                              headerName: '⚙️ Actions',
+                              minWidth: 200, // Ensure enough space for the button
+                              renderCell: (params) => (
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleExtendDeadline(params.row.id)}
+                                  sx={{ marginBottom: 2 }}
+                                >
+                                  Extend Deadline
+                                </Button>
+                              ),
                             },
                           ]}
                           pageSize={5}
@@ -485,6 +610,11 @@ const AdminDashboard = () => {
                               color: '#333',
                               fontSize: '14px',
                               padding: '8px',
+                              alignItems: 'center',
+                            },
+                            '& .MuiDataGrid-row': {
+                              display: 'flex',
+                              alignItems: 'center',
                             },
                             '& .MuiDataGrid-row:hover': {
                               background: '#e3f2fd',
@@ -499,6 +629,7 @@ const AdminDashboard = () => {
                           }}
                         />
                       </Box>
+
                     )}
                   </DialogContent>
                   <DialogActions

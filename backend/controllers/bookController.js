@@ -49,7 +49,6 @@ exports.addBook = async (req, res) => {
             name,
             author,
             isbn,
-            description: description || 'No description provided',
         };
 
         const qrFilePath = path.join(qrDir, `${name}-${savedBook._id}-qr.png`);
@@ -144,7 +143,6 @@ exports.releaseBook = async (req, res) => {
         }
 
         // Check if the user exists in the database
-        console.log("helooo", userId)
         const user = await User.findOne({ index: userId });
         if (!user) {
             console.log('User with this index does not exist.')
@@ -166,10 +164,15 @@ exports.releaseBook = async (req, res) => {
         book.borrowedBy = user._id;
         await book.save();
 
+        const borrowedDate = new Date();
+        const deadlineDate = new Date();
+        deadlineDate.setDate(borrowedDate.getDate() + 14);
+
         const borrow = new Borrow({
             book: bookId,
             user: user._id,
-            borrowedDate: new Date(),
+            borrowedDate,
+            deadlineDate,
         });
         await borrow.save();
 
