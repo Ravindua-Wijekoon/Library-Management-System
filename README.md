@@ -83,7 +83,5 @@ The Library Management System is a comprehensive web application built using the
 
 ---
 
-## Screenshots
--not yet
 
 
